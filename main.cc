@@ -11,6 +11,9 @@ int main()
 
     camera camera;
 
+    camera.aspect_ratio = 16.0 / 9.0;
+    camera.image_width = 100;
+
     // world
     hittable_list world;
 
