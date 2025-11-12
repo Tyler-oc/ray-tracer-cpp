@@ -30,7 +30,7 @@ public:
     static const interval empty, universe;
 };
 
-static const interval::empty = interval(+infinity, -infinity);
-static const interval::universe = interval(-infinity, +infinity);
+const interval interval::empty = interval(+infinity, -infinity);
+const interval interval::universe = interval(-infinity, +infinity);
 
 #endif
