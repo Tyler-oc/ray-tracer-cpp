@@ -14,13 +14,14 @@ public:
     hittable_list() {}
     hittable_list(shared_ptr<hittable> object) { add(object); }
 
-    void clear() { objects.clear(); }
+    void clear() { objects.clear(); } // clear all hittable objects
 
     void add(shared_ptr<hittable> object)
     {
-        objects.push_back(object);
+        objects.push_back(object); // add object to hittable list
     }
 
+    // check if an object was hit (this is overridden)
     bool hit(const ray &r, interval ray_t, hit_record &rec) const override
     {
         hit_record temp_rec;
@@ -29,6 +30,8 @@ public:
 
         for (const auto &object : objects)
         {
+            // check if each object is intersected, if it is, check if it is closer than any previous intersection
+            // we only want the closest intersection to be hit by the ray
             if (object->hit(r, interval(ray_t.min, closest_so_far), temp_rec))
             {
                 hit_anything = true;
