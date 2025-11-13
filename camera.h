@@ -11,6 +11,7 @@ public:
 
     double aspect_ratio = 16.0 / 9.0;
     int image_width = 256;
+    int samples_per_pixel = 10;
 
     void render(const hittable &world)
     {
@@ -25,12 +26,19 @@ public:
             std::clog << "\rScanlines remaining: " << image_height - j - 1 << ' ' << std::flush;
             for (int i = 0; i < image_width; i++)
             {
-                auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-                auto ray_direction = pixel_center - camera_center;
-                ray r(camera_center, ray_direction);
+                color pixel_color(0, 0, 0);
 
-                color pixel_color = ray_color(r, world);
-                write_color(std::cout, pixel_color);
+                for (int samples = 0; samples < samples_per_pixel; samples++)
+                {
+                    ray r = get_ray(i, j);
+                    pixel_color += ray_color(r, world);
+                }
+                // auto pixel_center = pixel00_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
+                // auto ray_direction = pixel_center - camera_center;
+                // ray r(camera_center, ray_direction);
+
+                // color pixel_color = ray_color(r, world);
+                write_color(std::cout, pixel_samples_scale * pixel_color);
             }
         }
 
@@ -39,10 +47,11 @@ public:
 
 private:
     int image_height;
+    double pixel_samples_scale; // color scale factor for sum of sampled pixels
     point3 camera_center;
-    point3 pixel00_loc;
-    vec3 pixel_delta_u;
-    vec3 pixel_delta_v;
+    point3 pixel00_loc; // location of pixel 0 0
+    vec3 pixel_delta_u; // offset to pixel to the right
+    vec3 pixel_delta_v; // offset to pixel down
 
     void initialize()
     {
@@ -50,6 +59,8 @@ private:
 
         image_height = int(image_width / aspect_ratio);
         image_height = (image_height < 1) ? 1 : image_height;
+
+        pixel_samples_scale = 1 / samples_per_pixel;
 
         // camera
 
@@ -69,6 +80,24 @@ private:
         // location of upper left pixel
         auto viewport_upper_left = camera_center - vec3(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
         pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
+    }
+
+    // gets ray from origin directed at point i, j
+    ray get_ray(int i, int j)
+    {
+        auto offset = sample_square();
+        auto pixel_sample = pixel00_loc + ((i + offset.x()) * pixel_delta_u) + ((j + offset.y()) * pixel_delta_v);
+
+        auto ray_origin = camera_center;
+        auto ray_direction = pixel_sample - ray_origin;
+
+        return ray(ray_origin, ray_direction);
+    }
+
+    vec3 sample_square() const
+    {
+        // returns vector to random point in unit square of length 1 around origin
+        return vec3(random_double() - .5, random_double() - .5, 0);
     }
 
     color ray_color(const ray &r, const hittable &world) const
