@@ -107,7 +107,8 @@ private:
         // check if the ray hits an object in the world
         if (world.hit(r, interval(0, infinity), rec))
         {
-            return 0.5 * (rec.normal + color(1, 1, 1)); // if it hits, set the color accordingly.
+            vec3 direction = random_on_hemisphere(rec.normal);
+            return 0.5 * ray_color(ray(rec.p, direction), world);
         }
         // linear blend of blue and white: blendVal = (1-a) * startVal + a*endVal
         vec3 unit_direction = unit_vector(r.direction());
