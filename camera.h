@@ -57,7 +57,7 @@ private:
         image_height = int(image_width / aspect_ratio);
         image_height = (image_height < 1) ? 1 : image_height; // realistically this should be higher for good results, like 50
 
-        pixel_samples_scale = 1 / samples_per_pixel; // term to average samples
+        pixel_samples_scale = 1.0 / samples_per_pixel; // term to average samples
 
         // Distance from the projection plane to the camera origin.
         auto focal_length = 1.0;
