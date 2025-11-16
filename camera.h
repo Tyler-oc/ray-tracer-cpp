@@ -110,9 +110,9 @@ private:
         }
         hit_record rec;
         // check if the ray hits an object in the world
-        if (world.hit(r, interval(0, infinity), rec))
+        if (world.hit(r, interval(0.001, infinity), rec))
         {
-            vec3 direction = random_on_hemisphere(rec.normal);
+            vec3 direction = rec.normal + random_unit_vector();
             return 0.5 * ray_color(ray(rec.p, direction), depth - 1, world);
         }
         // linear blend of blue and white: blendVal = (1-a) * startVal + a*endVal
