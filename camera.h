@@ -12,6 +12,7 @@ public:
     double aspect_ratio = 16.0 / 9.0; // width to height
     int image_width = 256;
     int samples_per_pixel = 10;
+    int max_depth = 10; // max number of ray bounces
 
     void render(const hittable &world)
     {
@@ -32,7 +33,7 @@ public:
                 for (int samples = 0; samples < samples_per_pixel; samples++)
                 {
                     ray r = get_ray(i, j);
-                    pixel_color += ray_color(r, world);
+                    pixel_color += ray_color(r, max_depth, world);
                 }
 
                 write_color(std::cout, pixel_samples_scale * pixel_color); // average the sample colors
@@ -101,14 +102,18 @@ private:
         return vec3(random_double() - .5, random_double() - .5, 0);
     }
 
-    color ray_color(const ray &r, const hittable &world) const
+    color ray_color(const ray &r, int depth, const hittable &world) const
     {
+        if (depth <= 0)
+        {
+            return color(0, 0, 0);
+        }
         hit_record rec;
         // check if the ray hits an object in the world
         if (world.hit(r, interval(0, infinity), rec))
         {
             vec3 direction = random_on_hemisphere(rec.normal);
-            return 0.5 * ray_color(ray(rec.p, direction), world);
+            return 0.5 * ray_color(ray(rec.p, direction), depth - 1, world);
         }
         // linear blend of blue and white: blendVal = (1-a) * startVal + a*endVal
         vec3 unit_direction = unit_vector(r.direction());
