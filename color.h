@@ -35,4 +35,9 @@ void write_color(std::ostream &out, const color &pixel_color)
     out << rbyte << ' ' << gbyte << ' ' << bbyte << '\n';
 }
 
+color multiply_albedo(color albedo, color r_color)
+{
+    return color(albedo.x() * r_color.x(), albedo.y() * r_color.y(), albedo.z() * r_color.z());
+}
+
 #endif

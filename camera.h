@@ -117,7 +117,7 @@ private:
             color attenuation;
             if (rec.mat->scatter(r, rec, attenuation, scattered))
             {
-                return attenuation * ray_color(scattered, depth - 1, world);
+                return multiply_albedo(attenuation, ray_color(scattered, depth - 1, world));
             }
             return color(0, 0, 0);
         }
