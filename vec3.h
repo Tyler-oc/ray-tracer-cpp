@@ -141,4 +141,13 @@ inline vec3 reflect(const vec3 &v, const vec3 &n)
     return v - 2 * dot(v, n) * n;
 }
 
+// implementation of snells law for refraction
+inline vec3 refract(const vec3 &incoming_ray, const vec3 &n, double etai_over_etat)
+{
+    auto cos_theta = std::fmin(dot(-incoming_ray, n), 1.0);                             // amount the ray is aligned with surface normal
+    vec3 r_out_perp = etai_over_etat * (incoming_ray + cos_theta * n);                  // perpendicular component of refracted ray
+    vec3 r_out_parallel = -std::sqrt(std::fabs(1.0 - r_out_perp.length_squared())) * n; // parallel component of refracted ray
+    return r_out_perp + r_out_parallel;
+}
+
 #endif
