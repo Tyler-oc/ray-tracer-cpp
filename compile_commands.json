@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/tonst/OneDrive/Desktop/Dev/ray-tracer-cpp/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe   -std=c++17 -o CMakeFiles\\Ray-Tracer.dir\\main.cc.obj -c C:\\Users\\tonst\\OneDrive\\Desktop\\Dev\\ray-tracer-cpp\\main.cc",
+  "file": "C:/Users/tonst/OneDrive/Desktop/Dev/ray-tracer-cpp/main.cc",
+  "output": "CMakeFiles/Ray-Tracer.dir/main.cc.obj"
+}
+]
