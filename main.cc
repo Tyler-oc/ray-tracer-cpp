@@ -12,6 +12,12 @@ int main()
     // world
     hittable_list world;
 
+    // auto material_left = make_shared<lambertian>(color(0, 0, 1));
+    // auto material_right = make_shared<lambertian>(color(1, 0, 0));
+
+    // world.add(make_shared<sphere>(point3(0, 0, -1.0), 0.5, material_right));
+    // world.add(make_shared<sphere>(point3(-1.0, 0, -1.0), 0.5, material_left));
+
     auto material_ground = make_shared<lambertian>(color(.8, .8, 0));
     auto material_center = make_shared<lambertian>(color(.3, .2, 0.5));
     auto material_left = make_shared<dielectric>(1.5);
@@ -32,6 +38,12 @@ int main()
     camera.image_width = 100;
     camera.samples_per_pixel = 100;
     camera.max_depth = 50;
+
+    camera.vfov = 90; // increase to zoom in
+
+    camera.lookfrom = point3(-2, 2, 1);
+    camera.lookat = point3(0, 0, -1);
+    camera.vup = vec3(0, -1, 0);
 
     camera.render(world);
 
