@@ -42,4 +42,8 @@
 
 build/
 
-./image.ppm
+*.ppm
+
+.vscode/
+
+.cache/
